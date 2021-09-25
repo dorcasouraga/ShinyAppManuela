@@ -46,12 +46,12 @@ fillmap2<-function(map, figtitle, y , leg.loc="beside", y.scl=NULL,
   }
 }
 
-data=read.csv("data/wpd_shiny_tract1018.csv")
+data=read.csv("data/NHC_WPD_1018.csv")
 fe=read.csv("data/fixedeffects.csv")[,-1]
 #replace NA with 0...assume informative NA's
 data[is.na(data)]=0
 
-NHtracts=readOGR("data/tl_2016_37__NHCounty_tract.shp")
+NHtracts=readOGR("data/tl_2016_37_tract.shp")
 
 
 #simply plot the arrest data
@@ -91,17 +91,17 @@ shinyServer(function(input,output){
         }} else
           if (input$adj=="Standardized Incidence Ratio"){
             if (input$data=="Total Arrests"){
-              MapData=data$arrests_total_sir[seq(input$year-2009,dim(data)[1],9)]
-              MapDataScl=data$arrests_total_sir
+              MapData=data$SIR_arrests[seq(input$year-2009,dim(data)[1],9)]
+              MapDataScl=data$SIR_arrests
               Caption=paste(input$year,input$data)
             } else 
               if (input$data=="White Only Arrests"){
-                MapData=data$arrests_W_sir[seq(input$year-2009,dim(data)[1],9)]
-                MapDataScl=data$arrests_W_sir
+                MapData=data$SIR_W[seq(input$year-2009,dim(data)[1],9)]
+                MapDataScl=data$SIR_W
                 Caption=paste(input$year,input$data)
               } else {
-                MapData=data$arrests_B_sir[seq(input$year-2009,dim(data)[1],9)]
-                MapDataScl=data$arrests_B_sir
+                MapData=data$SIR_B[seq(input$year-2009,dim(data)[1],9)]
+                MapDataScl=data$SIR_B
                 Caption=paste(input$year,input$data)
               }        
           } else 
@@ -161,36 +161,36 @@ shinyServer(function(input,output){
       if (input$data=="Total Arrests"){
         mat=exp(fe[1:7,])
         colnames(mat)<-c("Mean","95% CI Lower Bound","95% CI Upper Bound")
-        rownames(mat)<-c("% Black",
-                         "% Living in Poverty",
-                         "% Bachelors degree or more",
+        rownames(mat)<-c("% Aged 18-24",
                          "% Male",
+                         "% Living in Poverty",
+                         "% Black",
                          "% Secondary Homes",
-                         "% Aged 18-24",
-                         "Government Entity")
+                         "% Bachelors degree or more",
+                         "Government Entity")  
         mat
       } else
         if (input$data=="White Only Arrests"){
           mat=exp(fe[8:14,])
           colnames(mat)<-c("Mean","95% CI Lower Bound","95% CI Upper Bound")
-          rownames(mat)<-c("% Black",
-                           "% Living in Poverty",
-                           "% Bachelors degree or more",
-                           "% Male",
-                           "% Secondary Homes",
-                           "% Aged 18-24",
-                           "Government Entity")
+          rownames(mat)<-c("% Aged 18-24",
+                         "% Male",
+                         "% Living in Poverty",
+                         "% Black",
+                         "% Secondary Homes",
+                         "% Bachelors degree or more",
+                         "Government Entity")
           mat
         } else {
           mat=exp(fe[15:21,])
           colnames(mat)<-c("Mean","95% CI Lower Bound","95% CI Upper Bound")
-          rownames(mat)<-c("% Black",
-                           "% Living in Poverty",
-                           "% Bachelors degree or more",
-                           "% Male",
-                           "% Secondary Homes",
-                           "% Aged 18-24",
-                           "Government Entity")
+          rownames(mat)<-c("% Aged 18-24",
+                         "% Male",
+                         "% Living in Poverty",
+                         "% Black",
+                         "% Secondary Homes",
+                         "% Bachelors degree or more",
+                         "Government Entity")
           mat
         }
     }},rownames=T,colnames=T,digits=3,width="100%")
